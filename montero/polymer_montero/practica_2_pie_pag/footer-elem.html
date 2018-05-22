@@ -1,0 +1,122 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="footer-elem">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      :root {
+        --primary-color: #77c7f4;
+        --academy-white: #eee;
+        --academy-black: #111;
+        --front-color: #3d63ed;
+        --background-gradient: linear-gradient(rgba(0,0,40,.5), rgba(0,0,40,.5));
+      }
+      .content {
+        margin: 0 auto;
+        max-width: 900px;
+      }
+      .stats__numbers {
+        background-color: var(--academy-white);
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        padding: 20px 40px;
+      }
+
+      .stats__item {
+        text-align: center;
+      }
+
+      .stats__item-title {
+        color: var(--primary-color);
+        font-size: 40px;
+        margin: 0 0 15px 0;
+      }
+
+      .stats_text {
+        align-items: center;
+      
+      }
+
+      @supports not (display:grid) {
+      .stats__numbers {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+    }
+
+      @media screen and (max-width:768px) {
+      .stats__numbers {
+      justify-content: center;
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+      .stats__item {
+        margin: 20px 20px 20px 20px;
+    }
+  }
+
+    @media screen and (max-width: 425px) {
+    .stats__numbers {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+    .cover__img {
+      align-items: center;
+      justify-content: center;
+      display: block;
+      margin: 0 auto;
+
+    }
+
+    </style>
+
+    <template is="dom-repeat" items="[[footerData]]" as="item">
+        <section class="stats">
+          <div class="content">
+            <article class="stats__numbers">
+              <div class="stats__item">
+                <img src="[[item.img_1]]" width="[[item.horizontal]]" height="[[item.large]]" class="cover__img"></img>
+                <p width="[[item.horizontal]]" class="stats_text">[[item.info_1]]</p>
+              </div>
+              <div class="stats__item">
+                <img src="[[item.img_2]]" width="[[item.horizontal]]" height="[[item.large]]" class="cover__img"></img>
+                <p width="[[item.horizontal]]" class="stats_text">[[item.info_2]]</p>
+              </div>
+              <div class="stats__item">
+                <img src="[[item.img_3]]" width="[[item.horizontal]]" height="[[item.large]]" class="cover__img"></img>
+                <p width="[[item.horizontal]]" class="stats_text">[[item.info_3]]</p>
+              </div>
+          </div>
+        </section>
+
+    </template>
+  </template>
+
+  <script>
+    /**
+     * `footer-elem`
+     *
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class FooterElem extends Polymer.Element {
+      static get is() { return 'footer-elem'; }
+      static get properties() {
+        return {
+          footerData: {
+            type: Array,
+            value: []
+          },
+        };
+      }
+    }
+
+    window.customElements.define(FooterElem.is, FooterElem);
+  </script>
+</dom-module>

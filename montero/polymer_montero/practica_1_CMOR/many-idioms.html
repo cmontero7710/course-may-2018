@@ -1,0 +1,87 @@
+
+<link rel = 'import' href= "bower_components/polymer/polymer.html">
+<link rel = "import" href = "bower_components/paper-item/paper-item.html">
+<link rel = "import" href = "bower_components/paper-listbox/paper-listbox.html">
+<link rel = "import" href = "bower_components/iron-ajax/iron-ajax.html">
+
+
+<dom-module id = "many-idioms">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      paper-listbox {
+              width: 200px;
+              border: 1px dotted #ccc;
+           }
+           paper-item {
+              cursor: pointer;
+           }
+
+    </style>
+
+    <!-- Aqui se carga el archivo json con iron ajax y se le pasa el archivo que se tiene que abrir con [[lang]] y en la propiedad "on-response", le damos un nombre en este caso "handleResponse" y en la clase asignamos al objeto data los valores que contiene el archivo json-->
+    <iron-ajax
+    id="getQuoteAjax"
+    url="../archive_json/[[lang]].json"
+    handle-as="json"
+    on-response="handleResponse"
+    ></iron-ajax>
+
+    <h3>SELECCIONA UN IDIOMA</h3> <!-- el select-item cada vez que das un click en un valor de la lista la anexa el valor del idioma por ejemplo frances fr-->
+      <paper-listbox attr-for-selected="selected-item" selected="{{lang}}"> <!-- lang se declara como un string dentro de la clase y se inicializa con el valor ES -->
+         <paper-item on-click="idiomesclick" selected-item="es">Español</paper-item> <!--el evento on-click cada vez que seleccionamos un valor en la lista activa el airo ajax con el ID-->
+         <!--<paper-item disabled>English</paper-item> nota: Ejemplo como mostrar un valor deshabilitado-->
+         <paper-item on-click="idiomesclick" selected-item="en">English</paper-item>
+         <paper-item on-click="idiomesclick" selected-item="fr">Francais</paper-item>
+         <paper-item on-click="idiomesclick" selected-item="dt">Deutsch</paper-item>
+      </paper-listbox>
+
+<!-- Aqui con el objeto data mostramos el valor Info del archivo json-->
+      <p>[[data.Info]]</p> <!-- podemos poner una clase y darle un estilo -->
+
+  </template>
+
+  <script>
+
+    class ManyIdioms extends Polymer.Element {
+      static get is (){return 'many-idioms'}
+      static get properties() { /* Esta linea se debe ingresar para crear el objeto y la variable lang en la clase */
+        return {
+          data: {
+              type: Object,
+              value: {
+                "Idiom": "Es","Info":"" /* Se inicializa el objeto con valores default */
+              }
+          },
+          lang: { /* lang es una variable que se inicializa con el valor "es", pero es la que indica el nombre del archivo  */
+            type: String,
+            reflectToAttribute: true,
+            value:'es'
+          }
+        }
+      }
+/* Aqui van las funciones*/
+      idiomesclick() {
+        this.$.getQuoteAjax.generateRequest()
+      }
+
+
+      handleResponse() {
+          this.set('data', this.$.getQuoteAjax.lastResponse[0]);
+          this.dispatchEvent(new CustomEvent('lang-changed', {
+              bubbles: true,
+              composed: true,
+              detail: this.data
+          }));
+      }
+
+    }
+
+
+  window.customElements.define(ManyIdioms.is, ManyIdioms);
+  </script>
+
+</dom-module>
